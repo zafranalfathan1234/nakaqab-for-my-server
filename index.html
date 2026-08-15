@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kalender Nakaqab (1 N)</title>
+  <title>Kalender Nakaqab (Siklus Lunar Murni)</title>
   <style>
     :root {
       --bg1: #090d16;
@@ -35,7 +35,7 @@
 
     .container {
       width: min(1000px, 100%);
-      background: rgba(15, 23, 42, 0.75);
+      background: rgba(15, 23, 42, 0.8);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 24px;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
@@ -116,7 +116,6 @@
       width: fit-content;
     }
 
-    /* Penunjuk Jam / Waktu */
     .time-card h2 {
       font-size: 1.1rem;
       margin-bottom: 14px;
@@ -161,7 +160,6 @@
       font-weight: bold;
     }
 
-    /* Kartu Bulan */
     .month-card h2 {
       margin-bottom: 16px;
       font-size: 1.2rem;
@@ -235,23 +233,23 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>Kalender Nakaqab (1 N)</h1>
-      <p>Sistem Kalender Lunar Revisi • Total 279 Hari / Tahun</p>
+      <h1>Kalender Nakaqab</h1>
+      <p>Sistem Kalender Lunar • Independent dari Tahun Masehi (279 Hari / Tahun)</p>
     </div>
 
     <div class="content">
       <div class="left-panel">
         <!-- Kartu Tanggal -->
         <div class="date-card">
-          <div class="label">Tanggal Nakaqab Hari Ini</div>
+          <div class="label">Tanggal Nakaqab Saat Ini</div>
           <div id="nakaqabDate" class="nakaqab-date">Memuat...</div>
           <div id="gregorianDate" class="gregorian-date">Memuat...</div>
-          <div class="badge" id="statusBadge">Tahun 1 N (Siklus Lunar)</div>
+          <div class="badge" id="statusBadge">Awal Epoch: 1 Jan 2019 = 1 N</div>
         </div>
 
-        <!-- Kartu Jam / Waktu -->
+        <!-- Kartu Waktu / Jam -->
         <div class="time-card">
-          <h2>Sistem Penunjuk Jam Nakaqab</h2>
+          <h2>Penunjuk Jam Nakaqab</h2>
           
           <div class="form-group">
             <label for="sunShadow">A. Jam Matahari (Arah Bayangan):</label>
@@ -273,7 +271,7 @@
               <option value="7">Biru Hitam (Jam 7)</option>
               <option value="8">Hitam (Jam 8)</option>
               <option value="9">Biru Terang (Jam 9)</option>
-              <option value="1">Langit Putih (Gunakan Matahari +1 Jam, Jam 1)</option>
+              <option value="1">Langit Putih (Gunakan Matahari +1 Jam → Jam 1)</option>
             </select>
           </div>
 
@@ -294,24 +292,26 @@
   </div>
 
   <script>
-    // System Data Bulan Nakaqab (Total 279 Hari)
+    // Data Bulan Nakaqab (Total 279 Hari per Siklus Tahun)
     const bulanNakaqab = [
       { nama: "Jabar", siklus: "Mati → Purnama", hari: 15 },
-      { nama: "Fabar", siklus: "Mati → Mati berikutnya", hari: 30 },
+      { nama: "Fabar", siklus: "Mati → Mati", hari: 31 },
       { nama: "Safar", siklus: "Mati → Purnama", hari: 15 },
-      { nama: "Rajaq", siklus: "Mati → Mati berikutnya", hari: 30 },
+      { nama: "Rajaq", siklus: "Mati → Mati", hari: 31 },
       { nama: "Rajab", siklus: "Mati → Purnama", hari: 15 },
-      { nama: "Ali", siklus: "Mati → Mati berikutnya", hari: 30 },
+      { nama: "Ali", siklus: "Mati → Mati", hari: 32 },
       { nama: "Fajar", siklus: "Mati → Purnama", hari: 15 },
-      { nama: "Rajaf", siklus: "Mati → Mati berikutnya", hari: 30 },
+      { nama: "Rajaf", siklus: "Mati → Mati", hari: 31 },
       { nama: "Raja", siklus: "Mati → Purnama", hari: 15 },
-      { nama: "Talaq", siklus: "Mati → Mati berikutnya", hari: 30 },
+      { nama: "Talaq", siklus: "Mati → Mati", hari: 32 },
       { nama: "Lasaq", siklus: "Mati → Purnama", hari: 15 },
-      { nama: "Ganiz / Zabar", siklus: "Mati → Mati berikutnya", hari: 29 }
+      { nama: "Ganiz / Zabar", siklus: "Mati → Mati", hari: 32 }
     ];
 
     const TOTAL_HARI_TAHUN = 279;
-    const EPOCH_GREGORIAN = new Date(2024, 0, 1); // Epoch Tahun 1 Nakaqab
+    
+    // Titik Awal: 1 Januari 2019 Masehi = 1 Nakaqab (1 N)
+    const EPOCH_GREGORIAN = new Date(2019, 0, 1);
 
     function renderMonthList() {
       const container = document.getElementById("monthsContainer");
@@ -332,15 +332,16 @@
     function calculateNakaqabDate() {
       const today = new Date();
       
-      const diffTime = today - EPOCH_GREGORIAN;
+      // Menghitung akumulasi selisih hari dari Epoch (1 Jan 2019)
+      const diffTime = today.getTime() - EPOCH_GREGORIAN.getTime();
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
       
-      let nakaqabYear = 1;
+      // PERSIAPAN: Tahun Nakaqab murni dihitung dari total akumulasi hari / 279.
+      // 1 Januari Masehi TIDAK AKAN mereset tahun/bulan Nakaqab.
+      let nakaqabYear = 1 + Math.floor(diffDays / TOTAL_HARI_TAHUN);
       let dayOfYear = diffDays % TOTAL_HARI_TAHUN;
       
-      if (diffDays >= 0) {
-        nakaqabYear += Math.floor(diffDays / TOTAL_HARI_TAHUN);
-      } else {
+      if (diffDays < 0) {
         const absDays = Math.abs(diffDays);
         nakaqabYear = 1 - Math.ceil(absDays / TOTAL_HARI_TAHUN);
         dayOfYear = (TOTAL_HARI_TAHUN - (absDays % TOTAL_HARI_TAHUN)) % TOTAL_HARI_TAHUN;
