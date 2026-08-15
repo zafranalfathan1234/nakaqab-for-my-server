@@ -1,352 +1,404 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nakaqab Calendar</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
-:root{
-  --bg:#030611;--panel:rgba(10,18,39,.86);--panel2:#101c3b;
-  --text:#f4f7ff;--muted:#9caaca;--line:rgba(150,170,255,.18);
-  --accent:#8da9ff;--gold:#ffe5a0;--danger:#ff8b9e;
-}
-*{box-sizing:border-box}
-body{
- margin:0;min-height:100vh;color:var(--text);font-family:Inter,Arial,sans-serif;
- background:
- radial-gradient(circle at 15% 15%,rgba(80,89,255,.18),transparent 25%),
- radial-gradient(circle at 85% 25%,rgba(184,87,255,.15),transparent 25%),
- radial-gradient(circle at 50% 100%,rgba(40,130,255,.12),transparent 35%),
- #030611;
-}
-body:before{
- content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;
- background-image:radial-gradient(circle,#fff 0 1px,transparent 1.5px),radial-gradient(circle,#aebeff 0 1px,transparent 1.5px);
- background-size:107px 131px,193px 167px;background-position:10px 20px,70px 80px;
-}
-header{text-align:center;padding:40px 16px 22px;position:relative}
-header .moon{font-size:40px;filter:drop-shadow(0 0 18px #a7bbff)}
-h1{font-family:"Space Grotesk";font-size:clamp(36px,7vw,64px);margin:5px 0 6px;letter-spacing:-2px}
-.subtitle{color:var(--muted);margin:0}
-.wrap{width:min(1100px,calc(100% - 28px));margin:auto;padding-bottom:45px}
-.toolbar{display:flex;justify-content:center;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0 18px}
-button,select{
- border:1px solid var(--line);background:rgba(11,20,43,.9);color:var(--text);
- border-radius:12px;padding:11px 14px;font:inherit;font-weight:700;cursor:pointer;
-}
-button:hover,select:hover{border-color:rgba(160,180,255,.6)}
-button:active{transform:translateY(1px)}
-.card{
- background:linear-gradient(145deg,rgba(17,29,61,.9),rgba(5,11,27,.9));
- border:1px solid var(--line);border-radius:22px;padding:20px;margin-bottom:16px;
- box-shadow:0 20px 65px rgba(0,0,0,.35);backdrop-filter:blur(14px);
-}
-.hero{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;overflow:hidden;position:relative}
-.hero:after{
- content:"";width:180px;height:180px;border-radius:50%;position:absolute;right:-45px;top:-35px;
- background:radial-gradient(circle at 32% 30%,#fff 0 4%,#dce5ff 7%,#8595c4 38%,#26345c 70%,#0b1127 100%);
- box-shadow:0 0 45px rgba(140,165,255,.2);opacity:.8;
-}
-.hero>*{position:relative;z-index:1}
-.badge{display:inline-block;border:1px solid var(--line);background:#ffffff0d;color:var(--gold);border-radius:999px;padding:6px 10px;font-size:11px;font-weight:800;letter-spacing:.5px}
-.month-name{font:800 34px "Space Grotesk";margin-top:8px}
-.date,.phase,.muted{color:var(--muted)}
-.position{font-size:12px;color:#7786a5;margin-top:5px}
-.year{font:800 48px "Space Grotesk";text-align:right}
-.naka-date{text-align:right;color:var(--muted);font-size:13px}
-h2{font:700 22px "Space Grotesk";margin:0 0 16px}
-.calendar-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}
-.calendar-head .month-title{font:700 18px "Space Grotesk"}
-.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}
-.dow{text-align:center;color:#8290ad;font-size:11px;font-weight:800;padding:4px}
-.day{
- min-height:78px;padding:10px;border:1px solid var(--line);border-radius:13px;
- background:rgba(7,15,32,.76);transition:.15s;
-}
-.day:hover{border-color:rgba(150,175,255,.5);background:#132348}
-.day.blank{background:transparent;border-color:transparent}
-.day .n{font-size:16px;font-weight:800}
-.phase-mini{font-size:10px;color:#7f8da9;margin-top:8px;min-height:12px}
-.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:14px}
-table{width:100%;border-collapse:collapse}
-th,td{padding:11px 9px;border-bottom:1px solid var(--line);text-align:left}
-th{color:var(--gold);font-size:12px}
-.table-wrap{overflow:auto}
-.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
-.info{padding:15px;border:1px solid var(--line);border-radius:14px;background:#081329}
-.info b{display:block;margin-bottom:6px}
-footer{text-align:center;color:#63718f;font-size:12px;padding:3px 0 25px}
-@media(max-width:650px){
- .wrap{width:min(100% - 18px,1100px)}
- .card{padding:15px;border-radius:18px}
- .hero{grid-template-columns:1fr;min-height:190px}
- .hero:after{width:120px;height:120px;right:-35px;top:15px;opacity:.45}
- .year{text-align:left;font-size:38px}
- .naka-date{text-align:left}
- .month-name{font-size:29px}
- .grid{gap:4px}
- .day{min-height:65px;padding:8px;border-radius:10px}
- .phase-mini{font-size:9px}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalender Nakaqab (1 N)</title>
+  <style>
+    :root {
+      --bg1: #090d16;
+      --bg2: #1e1b4b;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-strong: rgba(255, 255, 255, 0.14);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --accent: #f59e0b;
+      --accent-2: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      padding: 24px;
+    }
+
+    .container {
+      width: min(1000px, 100%);
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 32px 24px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .header h1 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      margin-bottom: 8px;
+      background: linear-gradient(to right, #f59e0b, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header p {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+      padding: 24px;
+    }
+
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .date-card, .time-card, .month-card {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .label {
+      color: var(--accent);
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+
+    .nakaqab-date {
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    .gregorian-date {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      width: fit-content;
+    }
+
+    /* Penunjuk Jam / Waktu */
+    .time-card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 8px;
+      color: var(--accent-2);
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      outline: none;
+      font-size: 0.95rem;
+    }
+
+    select:focus {
+      border-color: var(--accent);
+    }
+
+    .time-result {
+      margin-top: 15px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      border-left: 4px solid var(--accent);
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    /* Kartu Bulan */
+    .month-card h2 {
+      margin-bottom: 16px;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .month-card h2 span {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: normal;
+    }
+
+    .months {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(130px, 1fr));
+      gap: 10px;
+    }
+
+    .month {
+      background: var(--card-strong);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 10px 8px;
+      text-align: center;
+      color: var(--text);
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .month .m-name {
+      font-weight: bold;
+      display: block;
+    }
+
+    .month .m-info {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 4px;
+      display: block;
+    }
+
+    .month:nth-child(odd) {
+      border-left: 3px solid var(--accent);
+    }
+
+    .month:nth-child(even) {
+      border-left: 3px solid var(--accent-2);
+    }
+
+    .month.active {
+      background: linear-gradient(135deg, var(--accent), #d97706);
+      color: #0f172a;
+      font-weight: bold;
+      transform: scale(1.02);
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    }
+
+    .month.active .m-info {
+      color: #1e293b;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <div class="moon">🌙</div>
-  <h1 id="title">Kalender Nakaqab</h1>
-  <p class="subtitle" id="subtitle">Kalender lunar revisi • Tahun 1 N</p>
-</header>
+  <div class="container">
+    <div class="header">
+      <h1>Kalender Nakaqab (1 N)</h1>
+      <p>Sistem Kalender Lunar Revisi • Total 279 Hari / Tahun</p>
+    </div>
 
-<main class="wrap">
-  <div class="toolbar">
-    <button id="prevBtn" type="button">← Bulan sebelumnya</button>
-    <select id="monthSelect" aria-label="Pilih bulan"></select>
-    <button id="nextBtn" type="button">Bulan berikutnya →</button>
-    <button id="todayBtn" type="button">Hari ini</button>
-    <select id="languageSelect" aria-label="Bahasa">
-      <option value="id">🇮🇩 Indonesia</option>
-      <option value="en">🇬🇧 English</option>
-      <option value="ms">🇲🇾 Melayu</option>
-    </select>
+    <div class="content">
+      <div class="left-panel">
+        <!-- Kartu Tanggal -->
+        <div class="date-card">
+          <div class="label">Tanggal Nakaqab Hari Ini</div>
+          <div id="nakaqabDate" class="nakaqab-date">Memuat...</div>
+          <div id="gregorianDate" class="gregorian-date">Memuat...</div>
+          <div class="badge" id="statusBadge">Tahun 1 N (Siklus Lunar)</div>
+        </div>
+
+        <!-- Kartu Jam / Waktu -->
+        <div class="time-card">
+          <h2>Sistem Penunjuk Jam Nakaqab</h2>
+          
+          <div class="form-group">
+            <label for="sunShadow">A. Jam Matahari (Arah Bayangan):</label>
+            <select id="sunShadow" onchange="calculateTime()">
+              <option value="">-- Pilih Arah Bayangan --</option>
+              <option value="1">Bayangan ke Barat Daya (Jam 1)</option>
+              <option value="2">Bayangan ke Selatan / Utara (Jam 2)</option>
+              <option value="3">Bayangan ke Tenggara (Jam 3)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="skyColor">B. Jam Malam / Sore (Warna Langit):</label>
+            <select id="skyColor" onchange="calculateTime()">
+              <option value="">-- Pilih Warna Langit --</option>
+              <option value="4">Biru Terang (Jam 4)</option>
+              <option value="5">Biru Hitam (Jam 5)</option>
+              <option value="6">Hitam (Jam 6)</option>
+              <option value="7">Biru Hitam (Jam 7)</option>
+              <option value="8">Hitam (Jam 8)</option>
+              <option value="9">Biru Terang (Jam 9)</option>
+              <option value="1">Langit Putih (Gunakan Matahari +1 Jam, Jam 1)</option>
+            </select>
+          </div>
+
+          <div id="timeResult" class="time-result">
+            Pilih kondisi bayangan atau langit di atas
+          </div>
+        </div>
+      </div>
+
+      <!-- Kartu Daftar Bulan -->
+      <div class="month-card">
+        <h2>Daftar Bulan Nakaqab <span>12 Bulan / 279 Hari</span></h2>
+        <div class="months" id="monthsContainer">
+          <!-- Rendered via JavaScript -->
+        </div>
+      </div>
+    </div>
   </div>
 
-  <section class="card hero">
-    <div>
-      <span class="badge" id="monthType"></span>
-      <div class="month-name" id="monthName"></div>
-      <div class="date" id="gregorianRange"></div>
-      <div class="position" id="monthPosition"></div>
-      <div class="phase" id="phase"></div>
-    </div>
-    <div>
-      <div class="year">1 N</div>
-      <div class="naka-date" id="nakaDate"></div>
-    </div>
-  </section>
+  <script>
+    // System Data Bulan Nakaqab (Total 279 Hari)
+    const bulanNakaqab = [
+      { nama: "Jabar", siklus: "Mati → Purnama", hari: 15 },
+      { nama: "Fabar", siklus: "Mati → Mati berikutnya", hari: 30 },
+      { nama: "Safar", siklus: "Mati → Purnama", hari: 15 },
+      { nama: "Rajaq", siklus: "Mati → Mati berikutnya", hari: 30 },
+      { nama: "Rajab", siklus: "Mati → Purnama", hari: 15 },
+      { nama: "Ali", siklus: "Mati → Mati berikutnya", hari: 30 },
+      { nama: "Fajar", siklus: "Mati → Purnama", hari: 15 },
+      { nama: "Rajaf", siklus: "Mati → Mati berikutnya", hari: 30 },
+      { nama: "Raja", siklus: "Mati → Purnama", hari: 15 },
+      { nama: "Talaq", siklus: "Mati → Mati berikutnya", hari: 30 },
+      { nama: "Lasaq", siklus: "Mati → Purnama", hari: 15 },
+      { nama: "Ganiz / Zabar", siklus: "Mati → Mati berikutnya", hari: 29 }
+    ];
 
-  <section class="card">
-    <div class="calendar-head">
-      <div class="month-title" id="calendarTitle"></div>
-      <div class="muted" id="calendarMeta"></div>
-    </div>
-    <div class="grid" id="calendar"></div>
-    <div class="legend">
-      <span id="legendNew">🌑 New Moon</span>
-      <span id="legendFull">🌕 Full Moon</span>
-    </div>
-  </section>
+    const TOTAL_HARI_TAHUN = 279;
+    const EPOCH_GREGORIAN = new Date(2024, 0, 1); // Epoch Tahun 1 Nakaqab
 
-  <section class="card">
-    <h2 id="conversionTitle">Konversi Masehi → Nakaqab</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th id="thMonth">Bulan Nakaqab</th>
-          <th id="thPhase">Fase</th>
-          <th id="thLength">Durasi</th>
-          <th id="thRange">Rentang Masehi</th>
-        </tr></thead>
-        <tbody id="conversion"></tbody>
-      </table>
-    </div>
-  </section>
+    function renderMonthList() {
+      const container = document.getElementById("monthsContainer");
+      container.innerHTML = "";
+      
+      bulanNakaqab.forEach((b, index) => {
+        const div = document.createElement("div");
+        div.className = "month";
+        div.id = `month-${index}`;
+        div.innerHTML = `
+          <span class="m-name">${index + 1}. ${b.nama}</span>
+          <span class="m-info">${b.siklus} (${b.hari} hr)</span>
+        `;
+        container.appendChild(div);
+      });
+    }
 
-  <section class="card">
-    <h2 id="moonSystem">🌙 Sistem Bulan</h2>
-    <div class="info-grid">
-      <div class="info"><b id="shortMonth">Bulan pendek</b><span class="muted" id="shortDesc">15 hari — Mati → Purnama</span></div>
-      <div class="info"><b id="longMonth">Bulan panjang</b><span class="muted" id="longDesc">29 hari — Mati → Mati berikutnya</span></div>
-      <div class="info"><b id="yearLabel">Tahun</b><span class="muted" id="yearDesc">Tahun Nakaqab saat ini adalah Tahun 1 N.</span></div>
-    </div>
-  </section>
+    function calculateNakaqabDate() {
+      const today = new Date();
+      
+      const diffTime = today - EPOCH_GREGORIAN;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      
+      let nakaqabYear = 1;
+      let dayOfYear = diffDays % TOTAL_HARI_TAHUN;
+      
+      if (diffDays >= 0) {
+        nakaqabYear += Math.floor(diffDays / TOTAL_HARI_TAHUN);
+      } else {
+        const absDays = Math.abs(diffDays);
+        nakaqabYear = 1 - Math.ceil(absDays / TOTAL_HARI_TAHUN);
+        dayOfYear = (TOTAL_HARI_TAHUN - (absDays % TOTAL_HARI_TAHUN)) % TOTAL_HARI_TAHUN;
+      }
 
-  <section class="card">
-    <h2 id="hours">☀️ Jam Matahari & 🌌 Jam Malam</h2>
-    <div class="info-grid">
-      <div class="info"><b>1</b><span class="muted" id="sun1"></span></div>
-      <div class="info"><b>2</b><span class="muted" id="sun2"></span></div>
-      <div class="info"><b>3</b><span class="muted" id="sun3"></span></div>
-      <div class="info"><b>4</b><span class="muted" id="night4"></span></div>
-      <div class="info"><b>5</b><span class="muted" id="night5"></span></div>
-      <div class="info"><b>6</b><span class="muted" id="night6"></span></div>
-      <div class="info"><b>7</b><span class="muted" id="night7"></span></div>
-      <div class="info"><b>8</b><span class="muted" id="night8"></span></div>
-      <div class="info"><b>9</b><span class="muted" id="night9"></span></div>
-      <div class="info"><b id="whiteSky"></b><span class="muted" id="whiteSkyDesc"></span></div>
-    </div>
-  </section>
-</main>
-<footer id="footer">Kalender Nakaqab • Sistem Tahun 1 N</footer>
+      let currentMonthIndex = 0;
+      let dayOfMonth = dayOfYear + 1;
 
-<script>
-"use strict";
+      for (let i = 0; i < bulanNakaqab.length; i++) {
+        if (dayOfMonth <= bulanNakaqab[i].hari) {
+          currentMonthIndex = i;
+          break;
+        }
+        dayOfMonth -= bulanNakaqab[i].hari;
+      }
 
-const months = [
- {name:"Jabar", length:15, phase:"short", range:{id:"1 Januari – 15 Januari",en:"January 1 – January 15",ms:"1 Januari – 15 Januari"}},
- {name:"Fabar", length:15, phase:"short", range:{id:"16 Januari – 30 Januari",en:"January 16 – January 30",ms:"16 Januari – 30 Januari"}},
- {name:"Safar", length:29, phase:"long", range:{id:"31 Januari – 28 Februari",en:"January 31 – February 28",ms:"31 Januari – 28 Februari"}},
- {name:"Rajaq", length:15, phase:"short", range:{id:"1 Maret – 15 Maret",en:"March 1 – March 15",ms:"1 Mac – 15 Mac"}},
- {name:"Rajab", length:29, phase:"long", range:{id:"16 Maret – 13 April",en:"March 16 – April 13",ms:"16 Mac – 13 April"}},
- {name:"Ali", length:15, phase:"short", range:{id:"14 April – 28 April",en:"April 14 – April 28",ms:"14 April – 28 April"}},
- {name:"Fajar", length:29, phase:"long", range:{id:"29 April – 27 Mei",en:"April 29 – May 27",ms:"29 April – 27 Mei"}},
- {name:"Rajaf", length:15, phase:"short", range:{id:"28 Mei – 11 Juni",en:"May 28 – June 11",ms:"28 Mei – 11 Jun"}},
- {name:"Raja", length:29, phase:"long", range:{id:"12 Juni – 10 Juli",en:"June 12 – July 10",ms:"12 Jun – 10 Julai"}},
- {name:"Talaq", length:15, phase:"short", range:{id:"11 Juli – 25 Juli",en:"July 11 – July 25",ms:"11 Julai – 25 Julai"}},
- {name:"Lasaq", length:29, phase:"long", range:{id:"26 Juli – 23 Agustus",en:"July 26 – August 23",ms:"26 Julai – 23 Ogos"}},
- {name:"Ganiz", length:15, phase:"short", range:{id:"24 Agustus – 7 September",en:"August 24 – September 7",ms:"24 Ogos – 7 September"}},
- {name:"Zabar", length:29, phase:"long", range:{id:"8 September – 6 Oktober",en:"September 8 – October 6",ms:"8 September – 6 Oktober"}}
-];
+      const bulanAktif = bulanNakaqab[currentMonthIndex];
 
-const T = {
- id:{
-  title:"Kalender Nakaqab",subtitle:"Kalender lunar revisi • Tahun 1 N",
-  prev:"← Bulan sebelumnya",next:"Bulan berikutnya →",today:"Hari ini",
-  calendar:"Kalender Bulanan",newMoon:"🌑 Bulan Mati",fullMoon:"🌕 Purnama",
-  conversion:"Konversi Masehi → Nakaqab",month:"Bulan Nakaqab",phase:"Fase",length:"Durasi",range:"Rentang Masehi",
-  short:"BULAN PENDEK",long:"BULAN PANJANG",shortMonth:"Bulan pendek",shortDesc:"15 hari — Mati → Purnama",
-  longMonth:"Bulan panjang",longDesc:"29 hari — Mati → Mati berikutnya",year:"Tahun",
-  yearDesc:"Tahun Nakaqab saat ini adalah Tahun 1 N.",hours:"☀️ Jam Matahari & 🌌 Jam Malam",
-  sun1:"Bayangan ke barat daya",sun2:"Bayangan ke selatan/utara",sun3:"Bayangan ke tenggara",
-  night4:"Langit biru terang",night5:"Langit biru hitam",night6:"Langit hitam",night7:"Langit biru hitam",night8:"Langit hitam",night9:"Langit biru terang",
-  white:"Langit putih",whiteDesc:"Gunakan matahari; jam kembali ke 1.",days:"hari",new:"Mati",full:"Purnama",
-  monthOf:"Bulan {n} dari 13",dayOf:"Hari 1–{n}",footer:"Kalender Nakaqab • Sistem Tahun 1 N"
- },
- en:{
-  title:"Nakaqab Calendar",subtitle:"Revised lunar calendar • Year 1 N",
-  prev:"← Previous month",next:"Next month →",today:"Today",
-  calendar:"Monthly Calendar",newMoon:"🌑 New Moon",fullMoon:"🌕 Full Moon",
-  conversion:"Gregorian → Nakaqab Conversion",month:"Nakaqab Month",phase:"Lunar Phase",length:"Length",range:"Gregorian Range",
-  short:"SHORT MONTH",long:"LONG MONTH",shortMonth:"Short month",shortDesc:"15 days — New Moon → Full Moon",
-  longMonth:"Long month",longDesc:"29 days — New Moon → New Moon",year:"Year",
-  yearDesc:"The current Nakaqab year is Year 1 N.",hours:"☀️ Solar Hours & 🌌 Night Hours",
-  sun1:"Shadow toward southwest",sun2:"Shadow toward south/north",sun3:"Shadow toward southeast",
-  night4:"Bright blue sky",night5:"Blue-black sky",night6:"Black sky",night7:"Blue-black sky",night8:"Black sky",night9:"Bright blue sky",
-  white:"White sky",whiteDesc:"Use the sun; the hour returns to 1.",days:"days",new:"New Moon",full:"Full Moon",
-  monthOf:"Month {n} of 13",dayOf:"Days 1–{n}",footer:"Nakaqab Calendar • Year 1 N"
- },
- ms:{
-  title:"Kalendar Nakaqab",subtitle:"Kalendar lunar semakan • Tahun 1 N",
-  prev:"← Bulan sebelumnya",next:"Bulan seterusnya →",today:"Hari ini",
-  calendar:"Kalendar Bulanan",newMoon:"🌑 Bulan Mati",fullMoon:"🌕 Purnama",
-  conversion:"Penukaran Masihi → Nakaqab",month:"Bulan Nakaqab",phase:"Fasa Lunar",length:"Tempoh",range:"Julat Masihi",
-  short:"BULAN PENDEK",long:"BULAN PANJANG",shortMonth:"Bulan pendek",shortDesc:"15 hari — Bulan Mati → Purnama",
-  longMonth:"Bulan panjang",longDesc:"29 hari — Bulan Mati → Bulan Mati",year:"Tahun",
-  yearDesc:"Tahun Nakaqab semasa ialah Tahun 1 N.",hours:"☀️ Jam Matahari & 🌌 Jam Malam",
-  sun1:"Bayang ke barat daya",sun2:"Bayang ke selatan/utara",sun3:"Bayang ke tenggara",
-  night4:"Langit biru terang",night5:"Langit biru hitam",night6:"Langit hitam",night7:"Langit biru hitam",night8:"Langit hitam",night9:"Langit biru terang",
-  white:"Langit putih",whiteDesc:"Gunakan matahari; jam kembali ke 1.",days:"hari",new:"Bulan Mati",full:"Purnama",
-  monthOf:"Bulan {n} daripada 13",dayOf:"Hari 1–{n}",footer:"Kalendar Nakaqab • Tahun 1 N"
- }
-};
+      document.getElementById("nakaqabDate").textContent = 
+        `${dayOfMonth} ${bulanAktif.nama} ${nakaqabYear} N`;
 
-let current = 10; // Lasaq is the default/likely current month.
-let lang = localStorage.getItem("nakaqabLanguage") || "id";
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById("gregorianDate").textContent = 
+        `Masehi: ${today.toLocaleDateString('id-ID', options)}`;
 
-const $ = id => document.getElementById(id);
+      const monthElements = document.querySelectorAll('.month');
+      monthElements.forEach(el => el.classList.remove('active'));
+      const activeEl = document.getElementById(`month-${currentMonthIndex}`);
+      if (activeEl) {
+        activeEl.classList.add('active');
+      }
+    }
 
-function setText(id,key){
- const el=$(id); if(el) el.textContent=T[lang][key];
-}
+    function calculateTime() {
+      const sunVal = document.getElementById("sunShadow").value;
+      const skyVal = document.getElementById("skyColor").value;
+      const resDiv = document.getElementById("timeResult");
 
-function init(){
- $("monthSelect").innerHTML="";
- months.forEach((m,i)=>{
-   const o=document.createElement("option");
-   o.value=i;o.textContent=m.name;$("monthSelect").appendChild(o);
- });
- $("languageSelect").value=lang;
- $("prevBtn").addEventListener("click",()=>{current=(current+months.length-1)%months.length;render()});
- $("nextBtn").addEventListener("click",()=>{current=(current+1)%months.length;render()});
- $("monthSelect").addEventListener("change",e=>{current=Number(e.target.value);render()});
- $("todayBtn").addEventListener("click",goToday);
- $("languageSelect").addEventListener("change",e=>{
-   lang=e.target.value;localStorage.setItem("nakaqabLanguage",lang);render();
- });
- render();
-}
+      if (sunVal) {
+        resDiv.textContent = `Jam Nakaqab (Matahari): Jam ${sunVal}`;
+        document.getElementById("skyColor").value = "";
+      } else if (skyVal) {
+        if (skyVal === "1") {
+          resDiv.textContent = `Jam Nakaqab: Langit Putih → Gunakan Jam 1 (Matahari +1 jam)`;
+        } else {
+          resDiv.textContent = `Jam Nakaqab (Sore/Malam): Jam ${skyVal}`;
+        }
+        document.getElementById("sunShadow").value = "";
+      } else {
+        resDiv.textContent = "Pilih kondisi bayangan atau langit di atas";
+      }
+    }
 
-function render(){
- const t=T[lang],m=months[current];
-
- document.documentElement.lang=lang;
- $("title").textContent=t.title;$("subtitle").textContent=t.subtitle;
- $("prevBtn").textContent=t.prev;$("nextBtn").textContent=t.next;$("todayBtn").textContent=t.today;
- $("calendarTitle").textContent=t.calendar;
- $("legendNew").textContent=t.newMoon;$("legendFull").textContent=t.fullMoon;
- $("conversionTitle").textContent=t.conversion;$("thMonth").textContent=t.month;
- $("thPhase").textContent=t.phase;$("thLength").textContent=t.length;$("thRange").textContent=t.range;
- $("shortMonth").textContent=t.shortMonth;$("shortDesc").textContent=t.shortDesc;
- $("longMonth").textContent=t.longMonth;$("longDesc").textContent=t.longDesc;
- $("yearLabel").textContent=t.year;$("yearDesc").textContent=t.yearDesc;
- $("hours").textContent=t.hours;
- ["sun1","sun2","sun3","night4","night5","night6","night7","night8","night9"].forEach(k=>setText(k,k));
- $("whiteSky").textContent=t.white;$("whiteSkyDesc").textContent=t.whiteDesc;
- $("footer").textContent=t.footer;
-
- $("monthSelect").value=String(current);
- $("monthName").textContent=m.name;
- $("monthType").textContent=m.length===15?t.short:t.long;
- $("gregorianRange").textContent=m.range[lang];
- $("monthPosition").textContent=t.monthOf.replace("{n}",current+1);
- $("nakaDate").textContent=t.dayOf.replace("{n}",m.length);
- $("phase").textContent=m.phase==="short"
-   ? (lang==="en"?"New Moon → Full Moon":lang==="ms"?"Bulan Mati → Purnama":"Mati → Purnama")
-   : (lang==="en"?"New Moon → New Moon":lang==="ms"?"Bulan Mati → Bulan Mati":"Mati → Mati");
-
- renderCalendar();
- renderConversion();
-}
-
-function renderCalendar(){
- const cal=$("calendar");cal.innerHTML="";
- const t=T[lang];
- const days=lang==="en"
-   ? ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
-   : lang==="ms"
-   ? ["Aha","Isn","Sel","Rab","Kha","Jum","Sab"]
-   : ["Min","Sen","Sel","Rab","Kam","Jum","Sab"];
- days.forEach(d=>{
-   const el=document.createElement("div");el.className="dow";el.textContent=d;cal.appendChild(el);
- });
-
- // Nakaqab months are displayed as a standard 7-column calendar.
- // The lunar day 1 is placed at the start of the calendar grid.
- for(let i=0;i<months[current].length;i++){
-   const el=document.createElement("div");el.className="day";
-   const n=i+1;
-   let marker="";
-   if(n===1) marker="🌑 "+t.new;
-   if(months[current].length===15 && n===15) marker="🌕 "+t.full;
-   if(months[current].length===29 && n===29) marker="🌑 "+t.new;
-   el.innerHTML='<div class="n">'+n+'</div><div class="phase-mini">'+marker+'</div>';
-   cal.appendChild(el);
- }
- $("calendarMeta").textContent=t.days+" • "+months[current].length;
-}
-
-function renderConversion(){
- const t=T[lang];
- $("conversion").innerHTML=months.map(m=>{
-   const phase=m.phase==="short"
-     ? (lang==="en"?"New Moon → Full Moon":lang==="ms"?"Bulan Mati → Purnama":"Mati → Purnama")
-     : (lang==="en"?"New Moon → New Moon":lang==="ms"?"Bulan Mati → Bulan Mati":"Mati → Mati");
-   return '<tr><td><b>'+m.name+'</b></td><td>'+phase+'</td><td>'+m.length+' '+t.days+'</td><td>'+m.range[lang]+'</td></tr>';
- }).join("");
-}
-
-function goToday(){
- // Current system is Year 1. This maps the Gregorian day-of-year into
- // the supplied conversion sequence and selects the corresponding Nakaqab month.
- const now=new Date();
- const dayOfYear=Math.floor((Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())-Date.UTC(now.getFullYear(),0,0))/86400000);
- let total=0;
- for(let i=0;i<months.length;i++){
-   if(dayOfYear<=total+months[i].length){current=i;break}
-   total+=months[i].length;
- }
- render();
-}
+    renderMonthList();
+    calculateNakaqabDate();
+  </script>
+</body>
+</html>
 
 init();
 </script>
